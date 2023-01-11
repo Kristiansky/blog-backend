@@ -3,24 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class PostController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Returns a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        return Post::select('id','title','description')->get();
+        return  response()->json(Post::select('id','title','description')->orderBy('id', 'desc')->get());
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -30,10 +32,10 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'title'=>'required',
@@ -55,12 +57,12 @@ class PostController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Returns the specified resource.
      *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\JsonResponse
+     * @param Post $post
+     * @return JsonResponse
      */
-    public function show(Post $post)
+    public function show(Post $post): JsonResponse
     {
         return response()->json([
             'post'=>$post->load('comments'),
@@ -70,8 +72,8 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @param Post $post
+     * @return void
      */
     public function edit(Post $post)
     {
@@ -81,9 +83,9 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Post $post
+     * @return void
      */
     public function update(Request $request, Post $post)
     {
@@ -93,8 +95,8 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @param Post $post
+     * @return void
      */
     public function destroy(Post $post)
     {
@@ -102,11 +104,12 @@ class PostController extends Controller
     }
 
     /**
-     * Display a count of all posts.
+     * Returns a count of all posts.
      *
      * @return int
      */
-    public function postsCount(){
+    public function postsCount(): int
+    {
         return Post::all()->count();
     }
 }
