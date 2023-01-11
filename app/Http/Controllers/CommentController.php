@@ -49,7 +49,7 @@ class CommentController extends Controller
             ]);
         }catch(\Exception $e){
             return response()->json([
-                'message'=>'Something goes wrong while creating a comment.'
+                'message'=>'Something went wrong while creating a comment.'
             ],500);
         }
     }

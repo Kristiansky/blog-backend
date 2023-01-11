@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -11,7 +12,11 @@ use Illuminate\Validation\Rules;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -35,13 +40,19 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 200,
                 'username' => $request->name,
+                'user_id' => $user->id,
                 'token' => $token,
                 'message' => 'Registered successfully.',
             ]);
         }
     }
 
-    public function login(Request $request){
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function login(Request $request): JsonResponse
+    {
         $validator = Validator::make($request->all(), [
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'max:255'],
@@ -64,6 +75,7 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => 200,
                     'username' => $user->name,
+                    'user_id' => $user->id,
                     'token' => $token,
                     'message' => 'Logged in successfully.',
                 ]);
@@ -71,7 +83,11 @@ class AuthController extends Controller
         }
     }
 
-    public function logout(){
+    /**
+     * @return JsonResponse
+     */
+    public function logout(): JsonResponse
+    {
         auth()->user()->tokens()->delete();
         return response()->json([
             'status' => 200,

@@ -49,7 +49,7 @@ class PostController extends Controller
             ]);
         }catch(\Exception $e){
             return response()->json([
-                'message'=>'Something goes wrong while creating a post. \n' . $e->getMessage()
+                'message'=>'Something went wrong while creating a post. \n' . $e->getMessage()
             ],500);
         }
     }
